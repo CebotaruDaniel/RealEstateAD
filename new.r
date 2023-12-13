@@ -175,16 +175,13 @@ diagram_asia_cameri <- ggplot(data_asia, aes(x = apartment_rooms)) +
   geom_bar(position = "dodge",fill="purple",color="black") +
   scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 1))
 
-# Afișați diagramele folosind grid.arrange
 grid.arrange(diagram_europa_etaje, diagram_europa_cameri, diagram_asia_etaje, diagram_asia_cameri, ncol = 2)
 
 data_europe$location <- "Europa"
 data_asia$location <- "Asia"
 
-# Combinați datele
 combined_data <- rbind(data_europe, data_asia)
 
-# Creați histograma combinată
 combined_histogram <- ggplot(combined_data, aes(x = price_in_USD, fill = location)) +
   geom_histogram(binwidth = 10000, breaks = intervale, color = "black", alpha = 0.5) +
   labs(title = "Histograma Prețurilor Apartamentelor în Europa și Asia (Interval de 10,000 USD)",
@@ -193,7 +190,6 @@ combined_histogram <- ggplot(combined_data, aes(x = price_in_USD, fill = locatio
   theme_minimal() +
   scale_fill_manual(values = c("Europa" = "blue", "Asia" = "purple"))
 
-# Afișați diagrama combinată
 combined_histogram
 
 
@@ -223,10 +219,8 @@ apartamente_1_camera_asia <- data_asia %>%
   filter(apartment_rooms == 1, !is.na(building_construction_year), !is.na(price_in_USD)) %>%
   mutate(origin = "Asia")
 
-# Combinați datele
 combined_data <- rbind(apartamente_1_camera_europe, apartamente_1_camera_asia)
 
-# Creați diagrama suprapusă
 ggplot(combined_data, aes(x = building_construction_year, y = price_in_USD, color = origin)) +
   geom_point() +
   labs(title = "Prețurile Apartamentelor cu 1 Cameră în funcție de Anul de Construcție",
@@ -267,25 +261,32 @@ selected_data <- final_realestate %>%
   
   summary(lm_model)
 
+  ggplot(cleaned_data, aes(x = log_area, y = price_in_USD)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE, color = "blue") +
+    labs(title = "Regresie Liniară",
+         x = "log_area",
+         y = "price_in_USD")
+  
   glimpse(final_realestate)  
   
   
   library(ggplot2)
   
-  # Filtrați datele pentru apartamentele căutate în Europa și Asia
+
   apartamente_cautate_europa <- final_realestate %>%
     filter(apartment_rooms == 3, apartment_floor== 7, continent == "Europe")
   
   apartamente_cautate_asia <- final_realestate %>%
     filter(apartment_rooms == 3,apartment_floor== 7, continent == "Asia")
   
-  # Creați un cadru de date pentru prețurile pe metru pătrat
+
   pret_pe_m2_cautat <- rbind(
     data.frame(Continent = "Europa", Pret_pe_m2 = apartamente_cautate_europa$price_per_m2),
     data.frame(Continent = "Asia", Pret_pe_m2 = apartamente_cautate_asia$price_per_m2)
   )
   
-  # Creați diagrama de densitate
+
   ggplot(pret_pe_m2_cautat, aes(x = Pret_pe_m2, fill = Continent)) +
     geom_density(alpha = 0.9) +
     labs(title = "Distribuția prețului pe metru pătrat pentru apartamentele căutate",
